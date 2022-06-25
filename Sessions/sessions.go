@@ -88,6 +88,5 @@ func CheckTokeninSession(tk string) bool {
 	} else {
 		match = false
 	}
-	fmt.Print(match)
 	return match
 }

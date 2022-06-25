@@ -21,19 +21,6 @@ func main() {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RealIP)
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		authHeader := r.Header.Values("Authorization")
-		tk := tokens.DeBeareringToken(authHeader[0])
-		rt := r.Header.Values("Refresh")[0]
-		if sessions.CheckTokeninSession(rt) {
-			if tokens.CheckTokensLifetime(tk) {
-				w.Write([]byte("Zbs"))
-			}
-
-		} else {
-			w.Write([]byte("Enither Token"))
-		}
-	})
 	r.Post("/login", func(w http.ResponseWriter, r *http.Request) {
 		var result map[string]interface{}
 		json.NewDecoder(r.Body).Decode(&result)
@@ -50,7 +37,7 @@ func main() {
 			w.Header().Add("Refresh", rt)
 		}
 	})
-	r.Get("/check", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Values("Authorization")
 		bearerHeader := authHeader[0]
 		if authHeader != nil {
